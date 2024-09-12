@@ -1,4 +1,10 @@
 class Endpoints {
-  Endpoints._();
-  static const String topStories = 'top';
+  Endpoints._(); // Приватный конструктор для предотвращения создания экземпляра
+
+  // Базовый URL вашего API
+  static const String baseUrl =
+      'https://aleshayamolkin.pythonanywhere.com/data/api';
+
+  // Конечная точка для работы с машинами
+  static const String cars = '$baseUrl/cars/';
 }
