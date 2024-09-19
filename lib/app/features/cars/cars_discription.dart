@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cpsrpoproject/app/app.dart';
+import 'package:cpsrpoproject/domain/repository/model/model.dart';
 
 class CarsDiscriptionScreen extends StatefulWidget {
-  const CarsDiscriptionScreen({super.key});
+  final Car car; // Добавляем поле для машины
+
+  const CarsDiscriptionScreen({
+    super.key,
+    required this.car,
+  });
   @override
   State<CarsDiscriptionScreen> createState() => _CarsDiscriptionScreenState();
 }
@@ -10,11 +16,13 @@ class CarsDiscriptionScreen extends StatefulWidget {
 class _CarsDiscriptionScreenState extends State<CarsDiscriptionScreen> {
   @override
   Widget build(BuildContext context) {
+    final car = widget.car; // Получаем переданный объект
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'Cars',
+            'Описание',
           ),
         ),
         body: SingleChildScrollView(
@@ -23,7 +31,7 @@ class _CarsDiscriptionScreenState extends State<CarsDiscriptionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Car',
+                '${car.brand} ${car.model}', // Используем данные из car
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               20.ph,
@@ -31,14 +39,18 @@ class _CarsDiscriptionScreenState extends State<CarsDiscriptionScreen> {
                 'assets/images/car.jpg',
                 fit: BoxFit.cover,
               ),
-              20.ph,
+              10.ph,
               Text(
-                'Discription',
-                style: Theme.of(context).textTheme.titleMedium,
+                'Год выпуска ${car.year}', // Замени на нужное описание
+                style: Theme.of(context).textTheme.labelSmall,
               ),
               10.ph,
               Text(
-                'TextDiscription',
+                'Запчасти: ${car.parts.join(', ')}', // Замени на нужное описание
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
+              Text(
+                'Страна ${car.country}', // Замени на нужное описание
                 style: Theme.of(context).textTheme.labelSmall,
               )
             ],

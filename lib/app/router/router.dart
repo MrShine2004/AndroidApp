@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:cpsrpoproject/app/app.dart';
 import 'package:cpsrpoproject/di/di.dart';
+import 'package:cpsrpoproject/domain/repository/model/model.dart';
 
 final GlobalKey<NavigatorState> _rootNavigationKey = GlobalKey<NavigatorState>(
   debugLabel: 'root',
@@ -24,12 +25,17 @@ final GoRouter router = GoRouter(
       // для следующей лабораторной работы
       routes: [
         GoRoute(
-          path: 'cars/:id',
-          pageBuilder: (context, state) {
-            return NoTransitionPage<void>(
-              key: state.pageKey,
-              child: const CarsDiscriptionScreen(),
-            );
+          path: 'home/cars/:id',
+          builder: (context, state) {
+            final car = state.extra;
+
+            if (car == null || car is! Car) {
+              return Scaffold(
+                body: Center(child: Text('Машина не найдена')),
+              );
+            }
+
+            return CarsDiscriptionScreen(car: car as Car);
           },
         ),
       ],

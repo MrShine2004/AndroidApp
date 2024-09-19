@@ -6,5 +6,5 @@ class Endpoints {
       'https://aleshayamolkin.pythonanywhere.com/data/api';
 
   // Конечная точка для работы с машинами
-  static const String cars = '$baseUrl/cars/';
+  static const String topCars = '$baseUrl/cars/';
 }
