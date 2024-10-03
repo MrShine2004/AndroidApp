@@ -27,32 +27,53 @@ final GoRouter router = GoRouter(
         GoRoute(
           path: 'cars/:id',
           pageBuilder: (context, state) {
-            final car = state.extra;
-
-            if (car == null || car is! Car) {
+            final carIdString =
+                state.pathParameters['id']; // Получаем параметр из маршрута
+            if (carIdString == null) {
               return NoTransitionPage<void>(
-                  key: state.pageKey,
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Машина не найдена :(',
-                          style: Theme.of(context).textTheme.headlineLarge,
-                        ),
-                        20.ph,
-                        const HomeScreen(),
-                      ]));
+                key: state.pageKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Машина не найдена :(',
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    20.ph,
+                    const HomeScreen(),
+                  ],
+                ),
+              );
+            }
+
+            final carId = int.tryParse(carIdString); // Преобразуем строку в int
+            if (carId == null) {
+              return NoTransitionPage<void>(
+                key: state.pageKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Некорректный ID машины',
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    20.ph,
+                    const HomeScreen(),
+                  ],
+                ),
+              );
             }
 
             return NoTransitionPage<void>(
               key: state.pageKey,
               child: BlocProvider(
-                create: (context) => CarsBloc(),
-                child: CarsDiscriptionScreen(car: car),
+                create: (context) => CarsBloc(
+                    getIt<CarsRepository>()), // Передаем CarsRepository
+                child: CarsDiscriptionScreen(carId: carId),
               ),
             );
           },
-        ),
+        )
       ],
     ),
     GoRoute(

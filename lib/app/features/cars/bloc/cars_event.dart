@@ -8,9 +8,10 @@ sealed class CarsEvent extends Equatable {
 }
 
 class CarsLoad extends CarsEvent {
-  final Car car;
-  const CarsLoad({required this.car});
+  final int carId; // Используем int для идентификатора машины
+
+  const CarsLoad({required this.carId}); // Передаем carId как int
 
   @override
-  List<Object> get props => [car];
+  List<Object> get props => [carId]; // Добавляем carId в props
 }

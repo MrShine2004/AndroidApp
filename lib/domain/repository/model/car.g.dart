@@ -15,7 +15,7 @@ Car _$CarFromJson(Map<String, dynamic> json) => Car(
       parts: (json['parts'] as List<dynamic>)
           .map((e) => (e as num).toInt())
           .toList(),
-      imgPath: json['image'] as String,
+      imgPath: json['image'] as String?,
     );
 
 Map<String, dynamic> _$CarToJson(Car instance) => <String, dynamic>{

@@ -11,17 +11,24 @@ part 'cars_event.dart';
 part 'cars_state.dart';
 
 class CarsBloc extends Bloc<CarsEvent, CarsState> {
-  CarsBloc() : super(CarsInitial()) {
+  final CarsRepository carsRepository;
+
+  CarsBloc(this.carsRepository) : super(CarsInitial()) {
     on<CarsLoad>(_onCarsLoad);
   }
 
-  void _onCarsLoad(CarsLoad event, Emitter<CarsState> emit) {
+  Future<void> _onCarsLoad(CarsLoad event, Emitter<CarsState> emit) async {
     try {
-      print('Загружаем машину: ${event.car}'); // Логируем машину
-      emit(CarsLoadSuccess(car: event.car)); // Передаем объект car напрямую
+      emit(CarsLoadInProgress());
+
+      // Делаем запрос к API для получения машины по ID
+      final car = await carsRepository.getCarById(event.carId);
+
+      emit(CarsLoadSuccess(car: car)); // Отправляем машину в состояние успеха
     } catch (error, stackTrace) {
       print('Ошибка загрузки машины: $error');
       emit(CarsLoadFailure(exception: error));
+      talker.handle(error, stackTrace); // Логируем ошибку через Talker
     }
   }
 }

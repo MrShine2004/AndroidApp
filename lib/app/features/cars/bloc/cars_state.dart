@@ -2,7 +2,6 @@ part of 'cars_bloc.dart';
 
 sealed class CarsState extends Equatable {
   const CarsState();
-
   @override
   List<Object> get props => [];
 }
@@ -24,7 +23,6 @@ final class CarsLoadFailure extends CarsState {
   const CarsLoadFailure({
     this.exception,
   });
-
   final Object? exception;
   @override
   List<Object> get props => [];

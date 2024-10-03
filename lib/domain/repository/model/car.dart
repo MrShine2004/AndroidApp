@@ -11,7 +11,7 @@ class Car {
     required this.year,
     required this.country,
     required this.parts,
-    required this.imgPath,
+    this.imgPath,
   });
 
   final int id;
@@ -20,10 +20,7 @@ class Car {
   final int year;
   final int country;
   final List<int> parts;
-  final String imgPath; // Хранится как строка пути к изображению
-
-  // Метод для получения объекта Image
-  Image get image => Image.network(imgPath);
+  final String? imgPath; // Хранится как nullable строка пути к изображению
 
   factory Car.fromJson(Map<String, dynamic> json) => _$CarFromJson(json);
   Map<String, dynamic> toJson() => _$CarToJson(this);

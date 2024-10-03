@@ -14,7 +14,7 @@ class CarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.go('/home/cars/${car.id}', extra: car);
+        context.push('/home/cars/${car.id}', extra: car.id);
       },
       borderRadius: BorderRadius.circular(5),
       child: Row(
@@ -22,21 +22,28 @@ class CarCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(5),
-            child: Image.network(
-              car.imgPath, // Используем путь к изображению из объекта Car
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                // Если изображение не загрузится, будет показана заглушка
-                return Image.asset(
-                  'assets/images/car.jpg', // Заменить на свой путь к заглушке
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                );
-              },
-            ),
+            child: car.imgPath != null
+                ? Image.network(
+                    car.imgPath!, // Безопасно используем imgPath, так как проверили на null
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Если изображение не загрузится, будет показана заглушка
+                      return Image.asset(
+                        'assets/images/car.jpg', // Путь к заглушке
+                        width: 100,
+                        height: 100,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  )
+                : Image.asset(
+                    'assets/images/car.jpg', // Заглушка, если imgPath == null
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
           ),
           20.pw,
           Expanded(

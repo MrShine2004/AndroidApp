@@ -6,11 +6,11 @@ import 'package:cpsrpoproject/domain/domain.dart';
 import 'package:cpsrpoproject/app/features/cars/bloc/cars_bloc.dart'; // Импортируем CarsBloc
 
 class CarsDiscriptionScreen extends StatefulWidget {
-  final Car car;
+  final int carId;
 
   const CarsDiscriptionScreen({
     super.key,
-    required this.car,
+    required this.carId,
   });
 
   @override
@@ -22,7 +22,7 @@ class _CarsDiscriptionScreenState extends State<CarsDiscriptionScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Отправляем событие для загрузки данных машины
-    context.read<CarsBloc>().add(CarsLoad(car: widget.car));
+    context.read<CarsBloc>().add(CarsLoad(carId: widget.carId));
   }
 
   @override
@@ -52,18 +52,23 @@ class _CarsDiscriptionScreenState extends State<CarsDiscriptionScreen> {
                     20.ph,
                     ClipRRect(
                       borderRadius: BorderRadius.circular(5),
-                      child: Image.network(
-                        car.imgPath,
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                            'assets/images/car.jpg',
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      ),
+                      child: car.imgPath != null
+                          ? Image.network(
+                              car.imgPath!,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/car.jpg',
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            )
+                          : Image.asset(
+                              'assets/images/car.jpg', // Заглушка, если imgPath == null
+                              fit: BoxFit.cover,
+                            ),
                     ),
                     10.ph,
                     Text(
