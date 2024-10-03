@@ -1,60 +1,99 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cpsrpoproject/app/app.dart';
-import 'package:cpsrpoproject/domain/repository/model/model.dart';
+import 'package:cpsrpoproject/di/di.dart';
+import 'package:cpsrpoproject/domain/domain.dart';
+import 'package:cpsrpoproject/app/features/cars/bloc/cars_bloc.dart'; // Импортируем CarsBloc
 
 class CarsDiscriptionScreen extends StatefulWidget {
-  final Car car; // Добавляем поле для машины
+  final Car car;
 
   const CarsDiscriptionScreen({
     super.key,
     required this.car,
   });
+
   @override
   State<CarsDiscriptionScreen> createState() => _CarsDiscriptionScreenState();
 }
 
 class _CarsDiscriptionScreenState extends State<CarsDiscriptionScreen> {
   @override
-  Widget build(BuildContext context) {
-    final car = widget.car; // Получаем переданный объект
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Отправляем событие для загрузки данных машины
+    context.read<CarsBloc>().add(CarsLoad(car: widget.car));
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Описание',
-          ),
+          title: const Text('Описание'),
         ),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${car.brand} ${car.model}', // Используем данные из car
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              20.ph,
-              Image.asset(
-                'assets/images/car.jpg',
-                fit: BoxFit.cover,
-              ),
-              10.ph,
-              Text(
-                'Год выпуска ${car.year}', // Замени на нужное описание
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-              10.ph,
-              Text(
-                'Запчасти: ${car.parts.join(', ')}', // Замени на нужное описание
-                style: Theme.of(context).textTheme.labelSmall,
-              ),
-              Text(
-                'Страна ${car.country}', // Замени на нужное описание
-                style: Theme.of(context).textTheme.labelSmall,
-              )
-            ],
-          ),
+        body: BlocBuilder<CarsBloc, CarsState>(
+          builder: (context, state) {
+            if (state is CarsLoadInProgress) {
+              // Показываем индикатор загрузки
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is CarsLoadSuccess) {
+              final car = state.car; // Получаем данные машины из состояния
+
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${car.brand} ${car.model}',
+                      style: Theme.of(context).textTheme.headlineLarge,
+                    ),
+                    20.ph,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Image.network(
+                        car.imgPath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.asset(
+                            'assets/images/car.jpg',
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      ),
+                    ),
+                    10.ph,
+                    Text(
+                      'Год выпуска ${car.year}',
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                    10.ph,
+                    Text(
+                      'Запчасти: ${car.parts.join(', ')}',
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                    Text(
+                      'Страна ${car.country}',
+                      style: Theme.of(context).textTheme.labelSmall,
+                    ),
+                  ],
+                ),
+              );
+            } else if (state is CarsLoadFailure) {
+              // Если произошла ошибка, показываем сообщение
+              return Center(
+                child: Text(
+                  'Ошибка: ${state.exception}',
+                  style: TextStyle(color: Colors.red),
+                ),
+              );
+            }
+            // Если нет данных, показываем заглушку
+            return const Center(child: Text('Машина не найдена'));
+          },
         ),
       ),
     );

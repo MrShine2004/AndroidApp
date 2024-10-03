@@ -14,7 +14,6 @@ class CarCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-// для следующей лабораторной работы
         context.go('/home/cars/${car.id}', extra: car);
       },
       borderRadius: BorderRadius.circular(5),

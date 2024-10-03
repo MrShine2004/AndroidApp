@@ -27,4 +27,9 @@ class Car {
 
   factory Car.fromJson(Map<String, dynamic> json) => _$CarFromJson(json);
   Map<String, dynamic> toJson() => _$CarToJson(this);
+
+  @override
+  String toString() {
+    return 'Car(id: $id, brand: $brand, model: $model)'; // Вывод нужных данных
+  }
 }

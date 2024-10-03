@@ -4,6 +4,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:cpsrpoproject/app/app.dart';
 import 'package:cpsrpoproject/di/di.dart';
 import 'package:cpsrpoproject/domain/repository/model/model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 final GlobalKey<NavigatorState> _rootNavigationKey = GlobalKey<NavigatorState>(
   debugLabel: 'root',
@@ -22,23 +23,46 @@ final GoRouter router = GoRouter(
           child: const HomeScreen(),
         );
       },
-      // для следующей лабораторной работы
       routes: [
         GoRoute(
-          path: 'home/cars/:id',
-          builder: (context, state) {
+          path: 'cars/:id',
+          pageBuilder: (context, state) {
             final car = state.extra;
 
             if (car == null || car is! Car) {
-              return Scaffold(
-                body: Center(child: Text('Машина не найдена')),
-              );
+              return NoTransitionPage<void>(
+                  key: state.pageKey,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Машина не найдена :(',
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                        20.ph,
+                        const HomeScreen(),
+                      ]));
             }
 
-            return CarsDiscriptionScreen(car: car as Car);
+            return NoTransitionPage<void>(
+              key: state.pageKey,
+              child: BlocProvider(
+                create: (context) => CarsBloc(),
+                child: CarsDiscriptionScreen(car: car),
+              ),
+            );
           },
         ),
       ],
+    ),
+    GoRoute(
+      path: '/',
+      pageBuilder: (context, state) {
+        return NoTransitionPage<void>(
+          key: state.pageKey,
+          child: const HomeScreen(),
+        );
+      },
     ),
   ],
 );
