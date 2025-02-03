@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "917081303248",
+    "project_id": "cpsrpo",
+    "storage_bucket": "cpsrpo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917081303248:android:cec34d746c87e6c04156d5",
+        "android_client_info": {
+          "package_name": "com.example.cpsrpoproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAeoXz1rYg2ASueSpN9S6MKP6cnUChj6SY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

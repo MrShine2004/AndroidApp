@@ -1,9 +1,9 @@
+import 'package:cpsrpoproject/app/features/auth/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:cpsrpoproject/app/app.dart';
 import 'package:cpsrpoproject/di/di.dart';
-import 'package:cpsrpoproject/domain/repository/model/model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 final GlobalKey<NavigatorState> _rootNavigationKey = GlobalKey<NavigatorState>(
@@ -12,7 +12,7 @@ final GlobalKey<NavigatorState> _rootNavigationKey = GlobalKey<NavigatorState>(
 final GoRouter router = GoRouter(
   debugLogDiagnostics: true,
   observers: [TalkerRouteObserver(talker)],
-  initialLocation: '/home',
+  initialLocation: '/',
   navigatorKey: _rootNavigationKey,
   routes: <RouteBase>[
     GoRoute(
@@ -81,7 +81,16 @@ final GoRouter router = GoRouter(
       pageBuilder: (context, state) {
         return NoTransitionPage<void>(
           key: state.pageKey,
-          child: const HomeScreen(),
+          child: const AuthScreen(),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/favourites',
+      pageBuilder: (context, state) {
+        return NoTransitionPage<void>(
+          key: state.pageKey,
+          child: FavouritesScreen(),
         );
       },
     ),

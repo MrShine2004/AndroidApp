@@ -1,3 +1,6 @@
+import 'package:cpsrpoproject/app/features/auth/auth_service.dart';
+import 'package:cpsrpoproject/app/features/favourites/bloc/favourites_bloc.dart';
+import 'package:cpsrpoproject/app/features/favourites/favourites_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 import 'package:dio/dio.dart';
@@ -14,4 +17,9 @@ Future<void> setupLocator() async {
   getIt.registerSingleton(talker);
   getIt.registerSingleton(CarsRepository(dio: getIt<Dio>()));
   getIt.registerSingleton(HomeBloc(getIt.get<CarsRepository>()));
+  getIt.registerSingleton<AuthService>(AuthService());
+  getIt.registerLazySingleton<FavouritesDataService>(
+      () => FavouritesDataService());
+  getIt.registerFactory<FavouritesBloc>(
+      () => FavouritesBloc(getIt<FavouritesDataService>()));
 }

@@ -1,9 +1,9 @@
+import 'package:cpsrpoproject/app/features/favourites/favourites_service.dart';
+import 'package:cpsrpoproject/di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cpsrpoproject/app/app.dart';
-import 'package:cpsrpoproject/di/di.dart';
-import 'package:cpsrpoproject/domain/domain.dart';
-import 'package:cpsrpoproject/app/features/cars/bloc/cars_bloc.dart'; // Импортируем CarsBloc
+// Импортируем CarsBloc
 
 class CarsDiscriptionScreen extends StatefulWidget {
   final int carId;
@@ -84,6 +84,36 @@ class _CarsDiscriptionScreenState extends State<CarsDiscriptionScreen> {
                       'Страна ${car.country}',
                       style: Theme.of(context).textTheme.labelSmall,
                     ),
+                    SizedBox(height: 20),
+                    BlocProvider(
+                      create: (_) =>
+                          FavouritesBloc(getIt<FavouritesDataService>())
+                            ..add(LoadFavourites()),
+                      child: BlocBuilder<FavouritesBloc, FavouritesState>(
+                        builder: (context, state) {
+                          bool isFavourite = false;
+                          if (state is FavouritesLoadSuccess) {
+                            isFavourite = state.favourites
+                                .any((element) => element.id == car.id);
+                          }
+                          return ElevatedButton(
+                            onPressed: () {
+                              if (isFavourite) {
+                                context.read<FavouritesBloc>().add(
+                                    RemoveFromFavourites(car.id.toString()));
+                              } else {
+                                context
+                                    .read<FavouritesBloc>()
+                                    .add(AddToFavourites(car));
+                              }
+                            },
+                            child: Text(isFavourite
+                                ? 'Удалить из избранного'
+                                : 'Добавить в избранное'),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               );
@@ -92,7 +122,7 @@ class _CarsDiscriptionScreenState extends State<CarsDiscriptionScreen> {
               return Center(
                 child: Text(
                   'Ошибка: ${state.exception}',
-                  style: TextStyle(color: Colors.red),
+                  style: const TextStyle(color: Colors.red),
                 ),
               );
             }

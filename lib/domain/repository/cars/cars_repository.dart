@@ -31,7 +31,7 @@ class CarsRepository extends CarsRepositoryIterface {
     try {
       // Добавляем токен вручную в заголовок
       final Response response = await dio.get(
-        Endpoints.topCars + "$carId",
+        "${Endpoints.topCars}$carId",
         options: Options(
           headers: {
             'Authorization': 'Token 9b90c7d29fa76cca9d5ce4e13a2413e3b65b3dc8',

@@ -1,7 +1,4 @@
-import 'package:cpsrpoproject/domain/domain.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:cpsrpoproject/app/app.dart';
 
 class ErrorCard extends StatelessWidget {
   final String title;
@@ -12,8 +9,8 @@ class ErrorCard extends StatelessWidget {
     required this.title,
     required this.description,
     required this.onReload,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +29,7 @@ class ErrorCard extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: onReload,
-            child: Text('Повторить'),
+            child: const Text('Повторить'),
           ),
         ],
       ),

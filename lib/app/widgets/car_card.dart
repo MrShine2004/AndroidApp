@@ -51,14 +51,14 @@ class CarCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  car.brand + " " + car.model,
+                  "${car.brand} ${car.model}",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.titleLarge,
                 ),
                 5.ph,
                 Text(
-                  'Год выпуска ' + car.year.toString(),
+                  'Год выпуска ${car.year}',
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodyLarge,
